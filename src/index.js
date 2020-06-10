@@ -1,81 +1,171 @@
-import React from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+import Button from "./components/Button";
+import Input from "./components/Input";
 
-class Button extends React.Component {
-  render() {
-    return (
-      <button className="button" onClick={this.props.onClick}>
-        {this.props.name}
-      </button>
-    );
-  }
-}
-
-class Panel extends React.Component {
+class Calculator extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       input: "",
       previousNumber: "",
-      currentNumber: "",
       operator: "",
+      nextOperation: "",
     };
   }
 
-  handleClick(i) {
-    console.log("value i= " + i);
-  }
+  addToInput = (val) => {
+    if (this.state.nextOperation !== "clear")
+      this.setState({ input: this.state.input + val });
+    else
+      this.setState({
+        input: val,
+        nextOperation: "",
+      });
+  };
 
-  renderButton(i) {
-    return <Button name={i} onClick={() => this.handleClick(i)} />;
-  }
+  add = () => {
+    this.setState({
+      previousNumber: this.state.input,
+      input: "",
+      operator: "plus",
+    });
+  };
+
+  divide = () => {
+    this.setState({
+      previousNumber: this.state.input,
+      input: "",
+      operator: "divide",
+    });
+  };
+
+  multiply = () => {
+    this.setState({
+      previousNumber: this.state.input,
+      input: "",
+      operator: "multiply",
+    });
+  };
+
+  subtract = () => {
+    this.setState({
+      previousNumber: this.state.input,
+      input: "",
+      operator: "subtract",
+    });
+  };
+
+  percent = () => {
+    let result = this.state.previousNumber / 100;
+    this.setState({
+      input: result,
+    });
+  };
+
+  addDecimal = (val) => {
+    if (this.state.input.indexOf(".") === -1)
+      this.setState({ input: this.state.input + val });
+  };
+
+  cutInput = () => {
+    this.setState({
+      input: this.state.input.slice(0, -1),
+    });
+  };
+
+  clearInput = () => {
+    this.setState({
+      input: "",
+      previousNumber: "",
+      operator: "",
+    });
+  };
+
+  evaluteInput = () => {
+    if (this.state.operator === "plus") {
+      let result =
+        parseFloat(this.state.previousNumber) + parseFloat(this.state.input);
+      this.setState({
+        input: result.toString(),
+        previousNumber: "",
+        operator: "",
+        nextOperation: "clear",
+      });
+    } else if (this.state.operator === "divide") {
+      let result =
+        parseFloat(this.state.previousNumber) / parseFloat(this.state.input);
+      this.setState({
+        input: result.toString(),
+        previousNumber: "",
+        operator: "",
+        nextOperation: "clear",
+      });
+    } else if (this.state.operator === "multiply") {
+      let result =
+        parseFloat(this.state.previousNumber) * parseFloat(this.state.input);
+      this.setState({
+        input: result.toString(),
+        previousNumber: "",
+        operator: "",
+        nextOperation: "clear",
+      });
+    } else if (this.state.operator === "subtract") {
+      let result =
+        parseFloat(this.state.previousNumber) - parseFloat(this.state.input);
+      this.setState({
+        input: result.toString(),
+        previousNumber: "",
+        operator: "",
+        nextOperation: "clear",
+      });
+    } else {
+      this.setState({
+        input: this.state.input,
+      });
+    }
+  };
 
   render() {
     return (
-      <div>
-        <div id="display" className="display-row"></div>
-        <div className="board-row">
-          {this.renderButton("AC")}
-          {this.renderButton("+/-")}
-          {this.renderButton("%")}
-          {this.renderButton("÷")}
+      <div className="index">
+        <div className=".calc-wrapper">
+          <div>
+            <Input>{this.state.input}</Input>
+          </div>
+          <div className="row">
+            <Button handleClick={this.addToInput}>7</Button>
+            <Button handleClick={this.addToInput}>8</Button>
+            <Button handleClick={this.addToInput}>9</Button>
+            <Button handleClick={this.divide}>÷</Button>
+          </div>
+          <div className="row">
+            <Button handleClick={this.addToInput}>4</Button>
+            <Button handleClick={this.addToInput}>5</Button>
+            <Button handleClick={this.addToInput}>6</Button>
+            <Button handleClick={this.multiply}>x</Button>
+          </div>
+          <div className="row">
+            <Button handleClick={this.addToInput}>1</Button>
+            <Button handleClick={this.addToInput}>2</Button>
+            <Button handleClick={this.addToInput}>3</Button>
+            <Button handleClick={this.add}>+</Button>
+          </div>
+          <div className="row">
+            <Button handleClick={this.addToInput}>00</Button>
+            <Button handleClick={this.addToInput}>0</Button>
+            <Button handleClick={this.addDecimal}>.</Button>
+            <Button handleClick={this.subtract}>-</Button>
+          </div>
+          <div className="row">
+            <Button handleClick={this.clearInput}>AC</Button>
+            <Button handleClick={this.cutInput}>C</Button>
+            <Button handleClick={this.evaluteInput}>=</Button>
+            <Button handleClick={this.percent}>%</Button>
+          </div>
         </div>
-        <div className="board-row">
-          {this.renderButton("1")}
-          {this.renderButton("2")}
-          {this.renderButton("3")}
-          {this.renderButton("*")}
-        </div>
-        <div className="board-row">
-          {this.renderButton("4")}
-          {this.renderButton("5")}
-          {this.renderButton("6")}
-          {this.renderButton("-")}
-        </div>
-        <div className="board-row">
-          {this.renderButton("7")}
-          {this.renderButton("8")}
-          {this.renderButton("9")}
-          {this.renderButton("+")}
-        </div>
-        <div className="board-row">
-          {this.renderButton("00")}
-          {this.renderButton("0")}
-          {this.renderButton(".")}
-          {this.renderButton("=")}
-        </div>
-      </div>
-    );
-  }
-}
-
-class Calculator extends React.Component {
-  render() {
-    return (
-      <div className="display">
-        <Panel />
       </div>
     );
   }
