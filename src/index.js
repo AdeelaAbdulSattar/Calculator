@@ -59,15 +59,18 @@ class Calculator extends Component {
   };
 
   percent = () => {
-    let result = this.state.previousNumber / 100;
+    let result = parseFloat(this.state.input) * 0.01;
     this.setState({
-      input: result,
+      input: result.toString(),
     });
   };
 
   addDecimal = (val) => {
     if (this.state.input.indexOf(".") === -1)
-      this.setState({ input: this.state.input + val });
+      this.setState({
+        input: this.state.input + val,
+        nextOperation: "",
+      });
   };
 
   cutInput = () => {
