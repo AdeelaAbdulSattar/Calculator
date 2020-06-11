@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.scss";
 import Button from "./components/Button";
 import Input from "./components/Input";
 
@@ -84,48 +84,38 @@ class Calculator extends Component {
     });
   };
 
-  evaluteInput = () => {
-    if (this.state.operator === "plus") {
-      let result =
-        parseFloat(this.state.previousNumber) + parseFloat(this.state.input);
-      this.setState({
-        input: result.toString(),
-        previousNumber: "",
-        operator: "",
-        nextOperation: "clear",
-      });
-    } else if (this.state.operator === "divide") {
-      let result =
-        parseFloat(this.state.previousNumber) / parseFloat(this.state.input);
-      this.setState({
-        input: result.toString(),
-        previousNumber: "",
-        operator: "",
-        nextOperation: "clear",
-      });
-    } else if (this.state.operator === "multiply") {
-      let result =
-        parseFloat(this.state.previousNumber) * parseFloat(this.state.input);
-      this.setState({
-        input: result.toString(),
-        previousNumber: "",
-        operator: "",
-        nextOperation: "clear",
-      });
-    } else if (this.state.operator === "subtract") {
-      let result =
-        parseFloat(this.state.previousNumber) - parseFloat(this.state.input);
-      this.setState({
-        input: result.toString(),
-        previousNumber: "",
-        operator: "",
-        nextOperation: "clear",
-      });
-    } else {
-      this.setState({
-        input: this.state.input,
-      });
+  get_result = (operator) => {
+    switch (operator) {
+      case "plus":
+        return (
+          parseFloat(this.state.previousNumber) + parseFloat(this.state.input)
+        );
+      case "divide":
+        return (
+          parseFloat(this.state.previousNumber) / parseFloat(this.state.input)
+        );
+      case "multiply":
+        return (
+          parseFloat(this.state.previousNumber) * parseFloat(this.state.input)
+        );
+      case "subtract":
+        return (
+          parseFloat(this.state.previousNumber) - parseFloat(this.state.input)
+        );
+      default:
+        return this.state.input;
     }
+  };
+
+  evaluteInput = () => {
+    let result = this.get_result(this.state.operator);
+
+    this.setState({
+      input: result.toString(),
+      previousNumber: "",
+      operator: "",
+      nextOperation: "clear",
+    });
   };
 
   render() {
